@@ -1,0 +1,50 @@
+import random
+
+class SlotMachine:
+    SYMBOLS = ['🍒', '🍊', '🍋', '🍇', '🔔', '💎']
+    PAYOUTS = {
+        ('🍒', '🍒', '🍒'): 50,
+        ('🍊', '🍊', '🍊'): 40,
+        ('🍋', '🍋', '🍋'): 30,
+        ('🍇', '🍇', '🍇'): 20,
+        ('🔔', '🔔', '🔔'): 10,
+        ('💎', '💎', '💎'): 5,
+    }
+
+    def __init__(self, credits=100):
+        self.credits = credits
+
+    def pull_lever(self):
+        if self.credits < 5:
+            print("Not enough credits to play!")
+            return
+        
+        self.credits -= 5
+        symbols = [random.choice(self.SYMBOLS) for _ in range(3)]
+        self.display_symbols(symbols)
+
+        payout = self.calculate_payout(symbols)
+        self.credits += payout
+        print(f"Payout: {payout} credits")
+        print(f"Total credits: {self.credits}")
+
+    def display_symbols(self, symbols):
+        print(" ".join(symbols))
+
+    def calculate_payout(self, symbols):
+        symbol_tuple = tuple(symbols)
+        if symbol_tuple in self.PAYOUTS:
+            return self.PAYOUTS[symbol_tuple]
+        else:
+            return 0
+
+# 슬롯 머신 테스트
+def test_slot_machine():
+    slot_machine = SlotMachine(credits=100)
+    while slot_machine.credits >= 5:
+        input("Press Enter to pull the lever...")
+        slot_machine.pull_lever()
+    print("Game over!")
+
+if __name__ == "__main__":
+    test_slot_machine()
